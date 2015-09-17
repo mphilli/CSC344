@@ -6,7 +6,7 @@
 using namespace std;
 #include <stdio.h>
 #include <string>
-#include <vector> // similar to Java ArrayList<> data type
+#include <vector> 
 
 void SLOC() {
 
@@ -160,6 +160,8 @@ void SLOC() {
                 instatement = false;
                 SLOC++;
             }
+            
+            // COUNTING COLONS 
             if (c == ':' && !incomment && !inquotes && !multicomment
                     && !incharquotes && !inparen && prev_c != ':') {
                 SLOC++;
