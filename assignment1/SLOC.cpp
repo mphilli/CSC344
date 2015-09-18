@@ -155,7 +155,9 @@ void SLOC() {
             } else if (c == ';' && afterwhile) {
                 afterwhile = false;
             }
-            if (c == ';' && !inparen && afterfor) {
+            
+            if (c == ';' && !inparen && afterfor && !incomment 
+            && !inquotes &&  !multicomment && !incharquotes) {
                 afterfor = false;
                 instatement = false;
                 SLOC++;
