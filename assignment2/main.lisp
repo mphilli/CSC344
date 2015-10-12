@@ -4,17 +4,8 @@
 (setf *random-state* (make-random-state t)) 
 (setq *print-case* :downcase)
 
-<<<<<<< HEAD
 ;; list for gladiator frequencies 
 (setq gladlist '(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0))
-=======
-(setq glad1 0)(setq glad2 0)(setq glad3 0)(setq glad4 0)
-(setq glad5 0)(setq glad6 0)(setq glad7 0)(setq glad8 0)
-(setq glad9 0)(setq glad10 0)(setq glad11 0)(setq glad12 0)
-(setq glad13 0)(setq glad14 0)(setq glad15 0)(setq glad16 0)
-(setq glad17 0)(setq glad18 0)(setq glad19 0)(setq glad20 0)
-
->>>>>>> 20faf7374be9e1415507648fc246d1ac2dedb346
 
 (format t  "~CGladiator Game~C" #\linefeed #\linefeed) 
 (format t  "What is the number of gladiators (1-20)? ")
@@ -40,21 +31,14 @@
 (loop
 (setq prob (* prob (/ 3 (length doorsp))))
 (setq doorsp (remove 'T doorsp :count 1))
-<<<<<<< HEAD
 (format t "Probability that ~d gladiators remain alive: ~d (~5f)~C" (+ 1 n) prob prob #\linefeed) 
-=======
->>>>>>> 20faf7374be9e1415507648fc246d1ac2dedb346
 (setq n (+ 1 n))
 (when (= n glad_num)(return))))
 
 
 ;;SCENARIO FUNCTION 
 (defun choices ()
-<<<<<<< HEAD
 (setq live 1)
-=======
-(probability) ;; reprints the probabilities
->>>>>>> 20faf7374be9e1415507648fc246d1ac2dedb346
 (setq i 0)  
 (loop 
 (setq rand (random (length doors)))
@@ -62,15 +46,10 @@
 (cond ((eq choice 'd) 
 	(setq doors (remove 'T doors :count 1))
 	(setq t_count (- t_count 1))
-<<<<<<< HEAD
 	(cond ((eq live 1)
 	    (modify_number)
 		) (t())))
 	(T(setq live 0)))
-=======
-	(modify_num))
-	(T))
->>>>>>> 20faf7374be9e1415507648fc246d1ac2dedb346
 
 ;; END OF LOOP 
 (setq i (+ 1 i))
@@ -93,7 +72,6 @@
 (defun modify_number()
 (setf (nth i gladlist) (+ 1 (nth i gladlist))))
 
-<<<<<<< HEAD
 (defun print_frequencies() 
 (format t "Simulation and frequencies: (PART II):~C" #\linefeed)
 (setq x 0) 
@@ -107,12 +85,3 @@
 (format t "~C" #\linefeed)
 (iterate) ;; runs main function 
 (print_frequencies) 
-=======
-(defun modify_num()
-(if (and (eq i 0) (eq choice 'd))
-(setq glad1 (+ 1 glad1)))
-)
-
-(iterate) ;; runs main function 
-(princ glad1)
->>>>>>> 20faf7374be9e1415507648fc246d1ac2dedb346
