@@ -4,6 +4,9 @@
 (setf *random-state* (make-random-state t)) 
 (setq *print-case* :downcase)
 
+;; list for gladiator frequencies 
+(setq gladlist '(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0))
+
 (format t  "~CGladiator Game~C" #\linefeed #\linefeed) 
 (format t  "What is the number of gladiators (1-20)? ")
 (setq input_num (read))
@@ -21,44 +24,32 @@
 
 ;;function for computing the probabilities
 (defun probability ()
+(format t "Probability (PART I):~C" #\linefeed)
 (setq prob 1)
 (setq doorsp '(T T T T D D D))
 (setq n 0)
 (loop
 (setq prob (* prob (/ 3 (length doorsp))))
 (setq doorsp (remove 'T doorsp :count 1))
-(cond ((= n 0) 	
-	(format t "~C Probability that ~d gladiator remains alive: ~d (~4f)"
-	#\linefeed (+ n 1) prob (float prob))) (t 
-	(format t "~C Probability that ~d gladiators remain alive: ~d (~4f)"
-	#\linefeed (+ n 1) prob (float prob))))
+(format t "Probability that ~d gladiators remain alive: ~d (~5f)~C" (+ 1 n) prob prob #\linefeed) 
 (setq n (+ 1 n))
 (when (= n glad_num)(return))))
 
-;; (probability)
 
 ;;SCENARIO FUNCTION 
 (defun choices ()
-(probability) ;; reprints the probabilities
-(setq L 0) ;; life tracker
-(setq D 0) ;; death tracker
+(setq live 1)
 (setq i 0)  
 (loop 
 (setq rand (random (length doors)))
 (setq choice (nth rand doors))
-
-(format t "~C~s"  #\linefeed doors)
 (cond ((eq choice 'd) 
-	(format t " He lives! ")
 	(setq doors (remove 'T doors :count 1))
 	(setq t_count (- t_count 1))
-	(setq L (+ 1 L)))
-	(T  
-		(format t " He dies! ")
-		(setq D (+ 1 D))
-	))
-	
-	(format t "|| Lived so far: ~d, Died so far: ~d" L D)
+	(cond ((eq live 1)
+	    (modify_number)
+		) (t())))
+	(T(setq live 0)))
 
 ;; END OF LOOP 
 (setq i (+ 1 i))
@@ -69,7 +60,6 @@
 (setq j 1)
 (loop 
 ;; doors to choose from 
-(format t "~C Scenario, #~d: "  #\linefeed j) 
 (setq doors '(T T T T D D D)) ;; choosable doors
 (setq prob 1) ;; probability tracker 
 (setq t_count 4) ;; keeps count of tigers
@@ -77,8 +67,21 @@
 	(choices) ;; RUNS SCENARIO 
 	
 (setq j (+ 1 j)) 
-(format t "~C" #\linefeed)
 (when (= j 1001) (return))))
 ;;end of loop
+(defun modify_number()
+(setf (nth i gladlist) (+ 1 (nth i gladlist))))
 
+(defun print_frequencies() 
+(format t "Simulation and frequencies: (PART II):~C" #\linefeed)
+(setq x 0) 
+(loop 
+(format t "Frequency that ~d gladiators lived: ~d~C" (+ 1 x) (nth x gladlist) #\linefeed)
+(setq x (+ 1 x))
+(when (eq x glad_num) (return))))
+
+(format t "~C" #\linefeed)
+(probability) ;; reprints the probabilities
+(format t "~C" #\linefeed)
 (iterate) ;; runs main function 
+(print_frequencies) 
