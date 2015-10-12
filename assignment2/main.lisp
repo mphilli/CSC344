@@ -28,10 +28,10 @@
 (setq prob (* prob (/ 3 (length doorsp))))
 (setq doorsp (remove 'T doorsp :count 1))
 (cond ((= n 0) 	
-		(format t "~C Probability that ~d gladiator remains alive: ~d (~4f)"
-		   #\linefeed (+ n 1) prob (float prob))) (t 
-		   (format t "~C Probability that ~d gladiators remain alive: ~d (~4f)"
-		   #\linefeed (+ n 1) prob (float prob))))
+	(format t "~C Probability that ~d gladiator remains alive: ~d (~4f)"
+	#\linefeed (+ n 1) prob (float prob))) (t 
+	(format t "~C Probability that ~d gladiators remain alive: ~d (~4f)"
+	#\linefeed (+ n 1) prob (float prob))))
 (setq n (+ 1 n))
 (when (= n glad_num)(return))))
 
