@@ -40,6 +40,8 @@
 ;;SCENARIO FUNCTION 
 (defun choices ()
 (probability) ;; reprints the probabilities
+(setq L 0) ;; life tracker
+(setq D 0) ;; death tracker
 (setq i 0)  
 (loop 
 (setq rand (random (length doors)))
@@ -49,10 +51,14 @@
 (cond ((eq choice 'd) 
 	(format t " He lives! ")
 	(setq doors (remove 'T doors :count 1))
-	(setq t_count (- t_count 1)))
+	(setq t_count (- t_count 1))
+	(setq L (+ 1 L)))
 	(T  
 		(format t " He dies! ")
+		(setq D (+ 1 D))
 	))
+	
+	(format t "|| Lived so far: ~d, Died so far: ~d" L D)
 
 ;; END OF LOOP 
 (setq i (+ 1 i))
