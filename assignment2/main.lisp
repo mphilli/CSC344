@@ -4,6 +4,13 @@
 (setf *random-state* (make-random-state t)) 
 (setq *print-case* :downcase)
 
+(setq glad1 0)(setq glad2 0)(setq glad3 0)(setq glad4 0)
+(setq glad5 0)(setq glad6 0)(setq glad7 0)(setq glad8 0)
+(setq glad9 0)(setq glad10 0)(setq glad11 0)(setq glad12 0)
+(setq glad13 0)(setq glad14 0)(setq glad15 0)(setq glad16 0)
+(setq glad17 0)(setq glad18 0)(setq glad19 0)(setq glad20 0)
+
+
 (format t  "~CGladiator Game~C" #\linefeed #\linefeed) 
 (format t  "What is the number of gladiators (1-20)? ")
 (setq input_num (read))
@@ -27,38 +34,22 @@
 (loop
 (setq prob (* prob (/ 3 (length doorsp))))
 (setq doorsp (remove 'T doorsp :count 1))
-(cond ((= n 0) 	
-	(format t "~C Probability that ~d gladiator remains alive: ~d (~4f)"
-	#\linefeed (+ n 1) prob (float prob))) (t 
-	(format t "~C Probability that ~d gladiators remain alive: ~d (~4f)"
-	#\linefeed (+ n 1) prob (float prob))))
 (setq n (+ 1 n))
 (when (= n glad_num)(return))))
 
-;; (probability)
 
 ;;SCENARIO FUNCTION 
 (defun choices ()
 (probability) ;; reprints the probabilities
-(setq L 0) ;; life tracker
-(setq D 0) ;; death tracker
 (setq i 0)  
 (loop 
 (setq rand (random (length doors)))
 (setq choice (nth rand doors))
-
-(format t "~C~s"  #\linefeed doors)
 (cond ((eq choice 'd) 
-	(format t " He lives! ")
 	(setq doors (remove 'T doors :count 1))
 	(setq t_count (- t_count 1))
-	(setq L (+ 1 L)))
-	(T  
-		(format t " He dies! ")
-		(setq D (+ 1 D))
-	))
-	
-	(format t "|| Lived so far: ~d, Died so far: ~d" L D)
+	(modify_num))
+	(T))
 
 ;; END OF LOOP 
 (setq i (+ 1 i))
@@ -69,7 +60,6 @@
 (setq j 1)
 (loop 
 ;; doors to choose from 
-(format t "~C Scenario, #~d: "  #\linefeed j) 
 (setq doors '(T T T T D D D)) ;; choosable doors
 (setq prob 1) ;; probability tracker 
 (setq t_count 4) ;; keeps count of tigers
@@ -77,8 +67,13 @@
 	(choices) ;; RUNS SCENARIO 
 	
 (setq j (+ 1 j)) 
-(format t "~C" #\linefeed)
 (when (= j 1001) (return))))
 ;;end of loop
 
+(defun modify_num()
+(if (and (eq i 0) (eq choice 'd))
+(setq glad1 (+ 1 glad1)))
+)
+
 (iterate) ;; runs main function 
+(princ glad1)
