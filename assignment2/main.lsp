@@ -1,9 +1,6 @@
 ;;; CSC344 LISP (ASSIGNMENT 2)
-
 (setf *random-state* (make-random-state t)) 
-
-
-(format t "What is the number of gladiators? (1-20): ") 
+(format t "What is the number of gladiators?: ") 
 (setq input_num (read))
 
 ;; makes sure N gladiators is between 1 and 20
@@ -22,6 +19,7 @@
 
 ;;; PART I: PROBABILITY 
 (format t "~C" #\linefeed) (format t "Probabilities for the gladiators: ~C" #\linefeed) 
+
 ;;PRINTS LITERAL STRINGS OF LIFE (L) OR DEATH (D) 
 (defun litprob()
 (setq u 1)(setq j_val 1) 
@@ -40,20 +38,16 @@
 (setf inlist (copy-list outlist))
 (when (= u glad_num) (return))) ;; END OF LOOP
 (setf outlist outlist))
-
 (cond ((= glad_num 1)
 (setq outlist '("L" "D"))) (t (litprob)))
 
-;; create parallel lists for lcount and probabilities
+;; create parallel lists for life-count and probabilities for each node in probability tree 
 (setq lclist '()) ;; how many gladiators lived in each element in the "outlist" list 
 (setq problist '()) ;; list of probabilities for each element in the "outlist" list 
-
 (defun run_loop() 
 (setq stringcount 0)(setq lcount 0)
 (loop
-
 (setq curr (subseq (nth loopcount outlist) stringcount (+ stringcount 1)))
-
 (cond ((string= curr "L")
 	(setq lcount (+ lcount 1))
 	(setq currprob (* currprob (/ 3 (length doorsp))))
@@ -66,11 +60,10 @@
 		 ) (t     	(setq currprob (* currprob (/ t_count (length doorsp))))))
 	(setf (nth loopcount lclist) lcount) 
 	(setf (nth loopcount problist) currprob)
-;;(format t "curr: ~s || ~d~d: ~d~d~C" curr loopcount ;;temp 
-;;(- (length (nth loopcount outlist)) 1) stringcount (+ stringcount 1) #\linefeed) ;; temp
+
+	
 (setq stringcount (+ stringcount 1))
 (when (= stringcount (length (nth loopcount outlist))) (return))))
-
 (setq loopcount 0) (loop 
 (setf lclist (append lclist '(0)))
 (setf problist (append problist '(1)))
@@ -82,6 +75,7 @@
 (when (= loopcount (list-length outlist)) (return)))
 (setq aproblist (make-list (+ 1 glad_num)))
 
+;;CREATE OUTPUT LIST FOR PROBABILITIES (what prints) 
 (setq e 0) (loop 
 (cond ((eq (nth (nth e lclist) aproblist) NIL)
 	(setf (nth (nth e lclist) aproblist) 0) ))
@@ -92,32 +86,28 @@
 ee (nth ee aproblist) (nth ee aproblist) #\linefeed)
 (setq ee (+ ee 1)) (when (= ee (+ glad_num 1)) (return)))
 
-;; PART 2 FREQUENCY 
-
+  
+;;; PART 2 FREQUENCY 
 (format t "~CAfter 1000 scenarios, here are the observed frequencies: ~C" #\linefeed #\linefeed)
+
 (setq freqlist '(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)) 
 (setq iter 0) (loop 
-
 (setq doors '(T T T T D D D)) ;; choosable doors
 (setq dovechoice 0)	
-
 (setq iter2 0) (loop 
-
 (setq rand (random (length doors)))
 (setq choice (nth rand doors))
 (cond ((eq choice 'D) ;; D means Dove here, not Die
 	(setq dovechoice (+ dovechoice 1))
 	(setq doors (remove 'T doors :count 1))))
-	
 	(setq iter2 (+ iter2 1))
 	(when (= iter2 glad_num) (return)))
 	(setf (nth dovechoice freqlist) (+ (nth dovechoice freqlist) 1))
 (setq iter (+ iter 1)) 
-(when (= iter 1001) (return)))
+(when (= iter 1000) (return)))
 
-;;print frequencies 
+;;print out the frequencies 
 (setq final 0) (loop
 (format t "The frequency that ~d gladiators remained alive: ~d~C" final (nth final freqlist) #\linefeed)
 (setq final (+ final 1))
 (when (= final (+ glad_num 1))  (return)))
-
