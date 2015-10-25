@@ -130,7 +130,6 @@ class parse(pattern: String, currchar: Int) {
 			if (curchar < unparsed.length() - 1) {
 				continue ();
 			}
-			println(unparsed);
 			E2('|', parseE3());
 		} else if (back == ')' && peek == '|' && curchar < unparsed.length() - 1) {
 			// FIX ! 
@@ -140,7 +139,6 @@ class parse(pattern: String, currchar: Int) {
 			}
 			return null; // for now
 		} else if (peek == '|' && back == '|') {
-			println("here");
 			return null;
 		} else return null;
 	}
