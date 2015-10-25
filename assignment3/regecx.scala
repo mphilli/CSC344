@@ -2,7 +2,6 @@
 
 import scala.io.StdIn.readLine;
 
-
 // TREE CLASS FOR DESCENT PARSING: 
 abstract class Tree(Any: Any)
 case class S(E: E, EOF: Char) extends Tree
@@ -13,11 +12,8 @@ case class T(F: F, T2: T2) extends Tree
 case class T2(F: F, T2: T2) extends Tree
 case class F(A: A, F2: F2) extends Tree
 case class F2(OP_OP: Char, F2: F2) extends Tree
-case class A(C: Char, A2: A2) extends Tree {
-	def this(C: Char) = this(C, null)
-}
+case class A(C: Char, A2: A2) extends Tree {def this(C: Char) = this(C, null)}
 case class A2(E: E, C: Char) extends Tree
-case class OR_OP(or_op: Char) extends Tree
 
 object regecx {
 	def main(args: Array[String]) = {
@@ -25,19 +21,18 @@ object regecx {
 		println("Pattern Matching Program (Regular Expressions)\n")
 		var pattern: String = readLine("pattern? ") + '$'
 		val parsed = new parse(pattern, 0);
-		println(parsed.parseS());
+		val parsed_pattern = parsed.parse;
+		println(parsed_pattern); // remove later
 		var string = readLine("string? ")
-		println("###"); 
+		//println("###"); 
 	}
 }
 
-//recursive top-down descent parsing class
+/* recursive top-down descent parsing class */
 class parse(pattern: String, currchar: Int) {
 	var curchar: Int = currchar;
 	var unparsed: String = pattern;
 	var next = unparsed.charAt(curchar + 1);
-
-
 	// some preliminary methods 
 	def
 	continue () = {
@@ -54,11 +49,12 @@ class parse(pattern: String, currchar: Int) {
 		} else {
 			return unparsed.charAt(curchar);
 		}
-
 	}
-
 	// parse methods, utilizing abstract tree class 
-
+	def parse(): Tree = { 
+	    return parseS(); 
+	}
+	 
 	def parseS(): S = {
 		S(parseE(): E, '$')
 	}
@@ -66,7 +62,6 @@ class parse(pattern: String, currchar: Int) {
 	def parseE(): E = {
 
 		E(parseT, parseE2)
-
 	}
 
 	def parseT(): T = {
@@ -91,8 +86,7 @@ class parse(pattern: String, currchar: Int) {
 		/* else if (peek != '?' && peek != '|' && peek == ')' && peek!='(') {
 	     if (curchar <= unparsed.length()) {continue();}
 	    A(peek, null);
-	   }
-	   */
+	   }*/
 		else {
 			return null;
 		}
