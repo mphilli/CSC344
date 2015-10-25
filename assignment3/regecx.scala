@@ -1,6 +1,6 @@
 /* CSC 344 ASSIGNMENT 3 (Scala) */
 
-import scala.io.StdIn.readLine;
+import scala.io.StdIn.readLine
 
 // TREE CLASS FOR DESCENT PARSING: 
 abstract class Tree(Any: Any)
