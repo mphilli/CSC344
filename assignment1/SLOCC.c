@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Source Lines of Code Counter, in C (for Java programs)
  * C Version (adapted from C++)
  */
@@ -32,8 +32,6 @@ void SLOCC() {
 
     /* GETS THE CODE LINE BY LINE FROM STANDARD INPUT*/
     while (fgets(line, sizeof (line), stdin)) {
-
-
 
         /* VARIABLES WHICH RESET LINE BY LINE*/
         char charstring [] = {'\0'}; //builds a string from individual chars
@@ -114,7 +112,6 @@ void SLOCC() {
                 prev_star = 0;
                 c = ' ';
             }
-
 
             //CHECKING FOR STRING QUOTES
             if (c == '"' && !incharquotes) {
@@ -260,8 +257,6 @@ void SLOCC() {
     printf("Total lines of physical code:  %d\n", num_lines);
     printf("Total lines of logical code (SLOC/LLOC):  %d\n", SLOC);
     printf("Maximum {} scope in the code: %d\n", cbmax);
-
-
 }
 
 int main() {
@@ -269,31 +264,3 @@ int main() {
     SLOCC();
     return 0;
 }
-
-/*
-Metric Outline for Source Lines of Code 
-This program is meant to count the logical source lines of code (SLOC), as well as report the scope of curly braces at each level. 
-Michael Phillips - CSC344 – Assignment 1 – 9/17/2015
-1. Statements requiring semi-colons constitute lines of code. 
--	int a = 16;  
--	ArrayList<String> list = new ArrayList<>();
-As far as the program is concerned, this includes empty and even illegal statements (as long as the statement properly ends with a semi-colon). 
--	a is 16; 
--	;;;;   // This would be 4 logical lines of code
-Note: Semi-colons are not used to count lines of code if they are within quotations or comments. 
-2. The declaration of classes and methods each constitute one logical line of code, counted by their { } scope. 
--	public static void main(String [] args) {    
--	public class Box { 
--	private static String thisBox(String name) {
-Note: The closing curly brace ‘}’ is not counted again as its own line of code. 
-3. Statements consisting of the keywords ‘for’, ‘while’, ‘do’, ‘if’, ‘else’, and ‘switch’ each constitute one line of code.
--	while (a > b) { 
--	for (int i = 0; i < 10; i++) { 
--	do  { } while (a > b);  // This would be 2 lines of code
-Note: The semicolons in the ‘for’ statement do not get counted as additional lines of code. 
-4. Single (//) and multi-line (/* ) comments do not count as logical lines of code, nor do blank/empty lines. 
-5. Statements which make use of ‘:’ as well as ‘case :’ constitute one line of logical code.
-6. @ annotations (where @ appears outside quotes or comments) constitute a line of code.
----------------------------------------------------------------------------------------------------------------------
-
-*/
