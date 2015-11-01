@@ -38,8 +38,9 @@ object regecx {
 		var ulti: Boolean = true
 		var pattern: S = parsed_pattern
 		var f2bool: Boolean = false
+		var a2bool: Boolean = false
 		var curr = cur; var last: Int = 0
-		
+
 	def matchfn(x: Any): Any = x match {
 			case x:S => matchfn(x.E)
 			case x:E => matchfn(x.T)
@@ -62,16 +63,19 @@ object regecx {
 				    if (x.C == uneval.charAt(curr)) {
 				    	curr += 1
 				    	matchbool = true
+				    	if (!a2bool) f2bool = false
 				    } else if (x.C == '<') {
 			    	  last = curr;
+			    	  if (f2bool==true) { a2bool=true; }
 					    matchfn(x.A2)
 			    	} else if (x.C != uneval.charAt(curr) && f2bool == true) {
 				    	matchbool = true
-					    f2bool = false
+					    if (!a2bool) f2bool = false
 				    } else {
 				      ulti = false
 				    }			
-			case x:A2 => matchfn(x.E)
+			case x:A2 => matchfn(x.E); a2bool = false
+									   f2bool = false
 			case x:T2 => matchfn(x.F)
 			    	if (x.T2 != null) {
 				      	matchfn(x.T2)
