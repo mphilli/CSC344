@@ -75,7 +75,7 @@ object regecx {
 				      ulti = false
 				    }			
 			case x:A2 => matchfn(x.E); a2bool = false
-									   f2bool = false
+						   f2bool = false
 			case x:T2 => matchfn(x.F)
 			    	if (x.T2 != null) {
 				      	matchfn(x.T2)
@@ -91,9 +91,9 @@ object regecx {
 		}
 		
 		// for null inputs
-    if(uneval=="$") {
-    uneval = "\0"; 
-    }
+                if(uneval=="$") {
+                   uneval = "\0"; 
+                      }
     
 		matchfn(pattern)
 		
@@ -133,8 +133,8 @@ class parse(pattern: String, currchar: Int) {
 	}
     
   /* 
-	Parseable form: 
-	S  -> E$
+  Parseable form: 
+  S  -> E$
   E  -> T E2
   E2 -> '|' E3 
   E2 -> NIL
@@ -148,7 +148,7 @@ class parse(pattern: String, currchar: Int) {
   A  -> c
   A  -> '(' A2
   A2 -> E ')'  
-	       */
+*/
 	
 	def parse(): S = {
 	  // parsing starts here
