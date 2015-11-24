@@ -1,4 +1,5 @@
-/*** CSC 344 ASSIGNMENT 3 - Scala ***/
+/*** CSC 344 ASSIGNMENT 3 - Scala 
+- Michael Phillips ***/
 
 import scala.io.StdIn.readLine
 
@@ -23,7 +24,7 @@ object regecx {
 		val parsed_pattern = parsed.parse
 		var string = readLine("string? ")
 		
-		while (string != "(end)") { // no terminating input
+		while (string != "(end)") {
 			var isMatch: Boolean = evaluate(string, parsed_pattern, 0)
 			if (isMatch) {
 				println("match")
@@ -60,22 +61,21 @@ object regecx {
 				}
 				matchfn(x.A)
 			case x:A =>
-				    if (x.C == uneval.charAt(curr)) {
-				    	curr += 1
-				    	matchbool = true
-				    	if (!a2bool) f2bool = false
-				    } else if (x.C == '<') {
-			    	  last = curr;
-			    	  if (f2bool==true) { a2bool=true; }
-					    matchfn(x.A2)
-			    	} else if (x.C != uneval.charAt(curr) && f2bool == true) {
-				    	matchbool = true
-					    if (!a2bool) f2bool = false
-				    } else {
-				      ulti = false
-				    }			
-			case x:A2 => matchfn(x.E); a2bool = false
-									   f2bool = false
+			    if (x.C == uneval.charAt(curr)) {
+			        curr += 1
+				matchbool = true
+			        if (!a2bool) f2bool = false
+				} else if (x.C == '<') {
+			    	  last = curr
+			    	if (f2bool==true) { a2bool=true; }
+				 matchfn(x.A2)
+			    } else if (x.C != uneval.charAt(curr) 
+			    	       && f2bool == true) {
+				       matchbool = true
+				    if (!a2bool) f2bool = false
+				    } else ulti = false
+			case x:A2 => matchfn(x.E); 
+			a2bool = false; f2bool = false
 			case x:T2 => matchfn(x.F)
 			    	if (x.T2 != null) {
 				      	matchfn(x.T2)
@@ -84,26 +84,27 @@ object regecx {
 			case x:E3 => matchfn(x.T)
 			    	if (ulti == true) {
 				    	// look no further
-				    } else if (x.E2 != null) {
-					    ulti = true
-					    matchfn(x.E2)
+				} else if (x.E2 != null) {
+				    ulti = true
+				    matchfn(x.E2)
 				    }
 		}
 		
 		// for null inputs
-    if(uneval=="$") {
-    uneval = "\0"; 
-    }
+                if(uneval=="$") {
+                   uneval = "\0"; 
+                      }
     
 		matchfn(pattern)
 		
 		// some final checks	
-		if (ulti == true && curr < uneval.length()-1) { 
+		if (ulti == true 
+		&& curr < uneval.length()-1) { 
 		  ulti = false; 
 		}
 		
 		if (ulti == false) {
-			matchbool = false
+		    matchbool = false
 		}
 		curr = 0
 		matchbool
@@ -128,13 +129,13 @@ class parse(pattern: String, currchar: Int) {
 		if ((curchar + 1) == unparsed.length()) {
 			'$'
 		} else {
-			unparsed.charAt(curchar)
+		    unparsed.charAt(curchar)
 		}
 	}
     
   /* 
-	Parseable form: 
-	S  -> E$
+  Parseable form: 
+  S  -> E$
   E  -> T E2
   E2 -> '|' E3 
   E2 -> NIL
@@ -148,7 +149,7 @@ class parse(pattern: String, currchar: Int) {
   A  -> c
   A  -> '(' A2
   A2 -> E ')'  
-	       */
+*/
 	
 	def parse(): S = {
 	  // parsing starts here
@@ -178,9 +179,11 @@ class parse(pattern: String, currchar: Int) {
 	}
 
 	def parseA(): A = {
-		if (peek != '?' && peek != '|' && peek != ')' && peek == '(') {
+		if (peek != '?' && peek != '|' 
+	           && peek != ')' && peek == '(') {
 			A('<', parseA2())
-		} else if (peek != '?' && peek != '|' && peek != ')' && peek != '(') {
+		} else if (peek != '?' && peek != '|' 
+		           && peek != ')' && peek != '(') {
 			if (curchar <= unparsed.length()) {
 				  move()
 			}
@@ -199,20 +202,21 @@ class parse(pattern: String, currchar: Int) {
 	def parseF2(): F2 = {
 		if (peek == '?') {
 			if (curchar <= unparsed.length()) {
-				move ()
+				move()
 			}
 			F2('?', parseF2())
 		} else null
 	}
 
 	def parseT2(): T2 = {
-		if (peek != '|' && peek != ')' && peek != '$' && peek != '?' && curchar <= unparsed.length()) {
+		if (peek != '|' && peek != ')' && peek != '$' 
+		&& peek != '?' && curchar <= unparsed.length()) {
 			T2(parseF(), parseT2())
 		} else if (peek == ')') {
 			if (curchar <= unparsed.length()) {
 				move()
 			}
-			null
+		       null
 		} else null
 	}
 
@@ -222,14 +226,16 @@ class parse(pattern: String, currchar: Int) {
 				move()
 			}
 			E2('|', parseE3());
-		} else if (back == ')' && peek == '|' && curchar < unparsed.length() - 1) {
-			unparsed = unparsed.substring(0, curchar) + '|' + unparsed.substring(curchar, unparsed.length())
+		} else if (back == ')' && peek == '|' 
+		        && curchar < unparsed.length() - 1) {
+			unparsed = unparsed.substring(0, curchar) + '|' + 
+			unparsed.substring(curchar, unparsed.length())
 			if (curchar < unparsed.length() - 1) {
 				move()
 			}
 			null
 		} else if (peek == '|' && back == '|') {
-			null
+		       null
 		} else null
 	}
 
