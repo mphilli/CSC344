@@ -19,10 +19,11 @@ def derive_symbols():
         # for C file
         if file.endswith(".c"):
             word_list = ['int', 'char', 'void']
-            omit = ['(', '{', ';']
+            omit = ['{', ';', "'", '[']
             already = []
             f = open(file)
             for line in f:
+                line = line.replace("(", "( ")
                 for o in omit:
                     line = line.replace(o, " ")
                 line_list = line.split()
@@ -32,7 +33,13 @@ def derive_symbols():
                         if line_list[n] in word_list and word not in already:              
                             already.append(word)
                             # print('[C,', word + ']')
-                            printlist.append('[C, ' + word + ']')
+                            printlist.append('[C, ' + word.replace("(", "") + ']')
+                        if line_list[n].endswith('(') and line_list[n] not in already:
+                            word = line_list[n].replace("(", "")
+                            already.append(line_list[n])
+                            # print('[C,', word + ']')
+                            if not word == "":
+                                printlist.append('[C, ' + word + ']')
                 
         # for Lisp file
         if file.endswith(".lsp"):
@@ -197,9 +204,9 @@ def derive_email():
        print("Error: unable to send email")
 
 def main():
-    derive_symbols()
-    derive_HTML()
-    derive_zip()
-    derive_email()
+    derive_symbols()     # generates the symbols.txt file 
+    derive_HTML()        # generates the HTML web page for assignments
+    derive_zip()         # generates the assignments in a '.zip' file. 
+    derive_email()       # sends the '.zip' file as an email 
 
-main()
+# main()
