@@ -5,7 +5,7 @@ main :-
 	write('Gladiator Program'), nl, 
     write('What is the number of gladiators? '), 
     read(X),
-    % X < 12 ? 
+    X < 13, X > 0,  
     XIN is 2**X / 2,
     gen_init(XIN, [], 0).
 
@@ -67,7 +67,7 @@ genD(FLen, [A|B], T, I, GenList) :-
 
 get_doves(List) :- 
     write('What is the number of doves?'), 
-    read(Doves), U is Doves,
+    read(Doves), U is Doves, Doves < 8, Doves > -1,
     make_door_list(Doves, 0, 7, Doors, List, U).
 
 make_door_list(Doves, I, DN, Doors, L, U) :- I < DN, Doves \= 0,
