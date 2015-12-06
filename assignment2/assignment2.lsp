@@ -5,12 +5,11 @@
 
 ;; makes sure N gladiators is between 1 and 20
 (defun check (input_num)
-(cond ((or (> input_num 20) (< input_num 1))
-	  (format t "Number of gladiators must be 1 to 20: ")
-	  (setq input_num (read))
-	  (check input_num))
-	  (t (setq input_num input_num))))
-	  
+	(cond ((or (> input_num 20) (< input_num 1))
+		(format t "Number of gladiators must be 1 to 20: ")
+		(setq input_num (read))
+		(check input_num))
+		(t (setq input_num input_num))))	  
 (setq input_num (check input_num))
 (setq glad_num input_num)
 (setq ldlist '("L" "D")) 
@@ -27,43 +26,43 @@
 (loop (setq j 0) 
 (loop
 (if (or (> k (list-length outlist)) (= k (list-length outlist)))
-(setf outlist (append outlist '(0)))) ;; makes a new element
+	(setf outlist (append outlist '(0)))) ;; makes a new element
 (setf (nth k outlist) (concatenate 'string (nth i ldlist) (nth j inlist)))
 (setq j (+ 1 j)) (setq k (+ 1 k))
-(when (= j (* j_val 2)) (return)))
+	(when (= j (* j_val 2)) (return)))
 (setq i (+ 1 i))
-(when (= i (list-length ldlist)) (return)))
+	(when (= i (list-length ldlist)) (return)))
 (setq u (+ 1 u))
 (setq j_val (+ j_val j_val))
 (setf inlist (copy-list outlist))
-(when (= u glad_num) (return))) ;; END OF LOOP
+	(when (= u glad_num) (return))) ;; END OF LOOP
 (setf outlist outlist))
 (cond ((= glad_num 1)
-(setq outlist '("L" "D"))) (t (litprob)))
+	(setq outlist '("L" "D"))) (t (litprob)))
 
 ;; create parallel lists for life-count and probabilities for each node in probability tree 
 (setq lclist '()) ;; how many gladiators lived in each element in the "outlist" list 
 (setq problist '()) ;; list of probabilities for each element in the "outlist" list 
 (defun run_loop() 
-(setq stringcount 0)(setq lcount 0)
-(loop
-(setq curr (subseq (nth loopcount outlist) stringcount (+ stringcount 1)))
-(cond ((string= curr "L")
-	(setq lcount (+ lcount 1))
-	(setq currprob (* currprob (/ 3 (length doorsp))))
-	(setq doorsp (remove 'T doorsp :count 1))
-	(cond ((> t_count 0)
-	(setq t_count (- t_count 1))) 
-	(t (setq t_count 0))) ;;*ERR: should not go beneath 0
-	) ((and (string= curr "D") (= t_count 0))
-		(setq currprob 0) 
-		 ) (t     	(setq currprob (* currprob (/ t_count (length doorsp))))))
+	(setq stringcount 0)(setq lcount 0)
+		(loop
+			(setq curr (subseq (nth loopcount outlist) stringcount (+ stringcount 1)))
+			(cond ((string= curr "L")
+				(setq lcount (+ lcount 1))
+				(setq currprob (* currprob (/ 3 (length doorsp))))
+				(setq doorsp (remove 'T doorsp :count 1))
+				(cond ((> t_count 0)
+					(setq t_count (- t_count 1))) 
+					(t (setq t_count 0))))
+					((and (string= curr "D") (= t_count 0))
+				(setq currprob 0)) 
+				(t (setq currprob (* currprob (/ t_count (length doorsp))))))
 	(setf (nth loopcount lclist) lcount) 
 	(setf (nth loopcount problist) currprob)
 
 	
 (setq stringcount (+ stringcount 1))
-(when (= stringcount (length (nth loopcount outlist))) (return))))
+	(when (= stringcount (length (nth loopcount outlist))) (return))))
 (setq loopcount 0) (loop 
 (setf lclist (append lclist '(0)))
 (setf problist (append problist '(1)))
@@ -79,12 +78,12 @@
 (setq e 0) (loop 
 (cond ((eq (nth (nth e lclist) aproblist) NIL)
 	(setf (nth (nth e lclist) aproblist) 0) ))
-(setf (nth (nth e lclist) aproblist) (+ (nth (nth e lclist) aproblist) (nth e problist)))
-(setq e (+ e 1)) (when (= e (length lclist)) (return)))
-(setq ee 0) (loop 
-(format t "The probability that ~d gladiators remain alive: ~d (~5f) ~C"
-ee (nth ee aproblist) (nth ee aproblist) #\linefeed)
-(setq ee (+ ee 1)) (when (= ee (+ glad_num 1)) (return)))
+	(setf (nth (nth e lclist) aproblist) (+ (nth (nth e lclist) aproblist) (nth e problist)))
+	(setq e (+ e 1)) (when (= e (length lclist)) (return)))
+	(setq ee 0) (loop 
+	(format t "The probability that ~d gladiators remain alive: ~d (~5f) ~C"
+	ee (nth ee aproblist) (nth ee aproblist) #\linefeed)
+	(setq ee (+ ee 1)) (when (= ee (+ glad_num 1)) (return)))
 
   
 ;;; PART 2 FREQUENCY 
@@ -104,10 +103,10 @@ ee (nth ee aproblist) (nth ee aproblist) #\linefeed)
 	(when (= iter2 glad_num) (return)))
 	(setf (nth dovechoice freqlist) (+ (nth dovechoice freqlist) 1))
 (setq iter (+ iter 1)) 
-(when (= iter 1000) (return)))
+	(when (= iter 1000) (return)))
 
 ;;print out the frequencies 
 (setq final 0) (loop
 (format t "The frequency that ~d gladiators remained alive: ~d~C" final (nth final freqlist) #\linefeed)
 (setq final (+ final 1))
-(when (= final (+ glad_num 1))  (return)))
+	(when (= final (+ glad_num 1))  (return)))

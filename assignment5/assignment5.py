@@ -32,12 +32,10 @@ def derive_symbols():
                         word = line_list[n+1]
                         if line_list[n] in word_list and word not in already:              
                             already.append(word)
-                            # print('[C,', word + ']')
                             printlist.append('[C, ' + word.replace("(", "") + ']')
                         if line_list[n].endswith('(') and line_list[n] not in already:
                             word = line_list[n].replace("(", "")
                             already.append(line_list[n])
-                            # print('[C,', word + ']')
                             if not word == "":
                                 printlist.append('[C, ' + word + ']')
                 
@@ -47,22 +45,32 @@ def derive_symbols():
             already = []
             f = open(file)
             for line in f:
-                line = line.replace('(', '');line = line.replace(')', '')
+                line = line.replace('(', ''); #
+                line = line.replace(')', '')
                 line_list = line.split()
                 for n in range(len(line_list)):
                     if line_list[n] in word_list and line_list[n+1] not in already:
                         word = line_list[n+1].replace("*", "")
                         already.append(word)
-                        # print('[Lisp,', word + ']')
                         printlist.append('[Lisp, ' + word + ']')
+                    """
+                    # if all f in (f x) pairs count: 
+                    if line_list[n].startswith("(") and line_list[n] not in already:
+                        already.append(line_list[n])
+                        printlist.append('[Lisp, ' + line_list[n].replace('(', '') + ']')
+                    """
+        
                         
         # for Scala file                 
         if file.endswith(".scala"):
-            word_list = ['val', 'var', 'def', 'class']
-            syms = ['(', ')', ':', '{', '}']
-            f = open(file) ;
+            word_list = ['val', 'var', 'class', 'def']
+            syms = [')', ':', '{', '}', '"', ',', "?",
+                    "'", ';', '-', '==' , '0', '1', 'if']
+            f = open(file)
             already = []
             for line in f:
+                line = line.replace("(", "( ");
+                line = line.replace(".", " ");
                 for punct in syms:
                     line = line.replace(punct, " ")
                 line_list = line.split()
@@ -70,9 +78,14 @@ def derive_symbols():
                     if n < len(line_list)-1:
                         if line_list[n] in word_list and line_list[n+1] not in already:
                             if not line_list[0].startswith('//'):
-                                word = line_list[n+1]
-                                already.append(word)
-                                # print('[Scala,', word + ']')
+                                already.append(line_list[n+1])
+                                word = line_list[n+1].replace("(", "");
+                                if word != "":
+                                    printlist.append('[Scala, ' + word + ']')
+                        if line_list[n].endswith("(") and not line_list[n] in already:
+                            already.append(line_list[n])
+                            word = line_list[n].replace("(", "");
+                            if word != "":
                                 printlist.append('[Scala, ' + word + ']')
                                 
         # for Prolog file
@@ -85,40 +98,47 @@ def derive_symbols():
                 line = line.replace("(", "( ")
                 line_list = line.split()
                 for n in range(len(line_list)):
-                    #print(line_list[n])
                     word = line_list[n].replace(')', '') #current
                     if word.endswith(',') and not word.startswith("'") and not word in already:
-                        already.append(word)
-                        word = word.replace(')', ''); word = word.replace(',', '')
-                        clear = True
-                        for punct in syms:
-                            if punct in word: clear = False
-                        for currnum in num:
-                            if word.startswith(currnum): clear = False
-                        if clear == True:
-                            # print('[Prolog,', word + ']')
-                            printlist.append('[Prolog, ' + word + ']')
+                        if not word.startswith("-"):
+                            already.append(word)
+                            word = word.replace(')', ''); word = word.replace(',', '')
+                            clear = True
+                            for punct in syms:
+                                if punct in word: clear = False
+                            for currnum in num:
+                                if word.startswith(currnum): clear = False
+                            if clear == True:
+                                if word != "":
+                                    printlist.append('[Prolog, ' + word + ']')
                     elif line_list[n].endswith('(') and not word in already:
-                        already.append(word)
-                        word = word.replace(')', ''); word = word.replace('(', '')
-                        clear = True
-                        for punct in syms:
-                            if punct in word: clear = False
-                        for currnum in num:
-                            if word.startswith(currnum): clear = False
-                        if clear == True:
-                            # print('[Prolog,', word + ']')
-                            printlist.append('[Prolog, ' + word + ']')
+                        if not line_list[n].startswith("-"):
+                            already.append(word)
+                            word = word.replace(')', ''); word = word.replace('(', '')
+                            clear = True
+                            for punct in syms:
+                                if punct in word: clear = False
+                            for currnum in num:
+                                if word.startswith(currnum): clear = False
+                            if clear == True:
+                                if word != "":
+                                    printlist.append('[Prolog, ' + word + ']')
+                    elif line_list[n] == ":-" and not line_list[n-1] in already:
+                        if not ")" in line_list[n-1] and not "," in line_list[n-1]:
+                                    already.append(line_list[n-1])
+                                    printlist.append('[Prolog, ' + line_list[n-1] + ']')
 
         # for Python file 
         if file.endswith(".py"):
             already = []
-            symbols = ["'", ')', '(', ':', ';', ',',
-                        '"','==', '#', '!', ']']
+            symbols = ["'", ')', ':', ';', ',',
+                        '"','==', '#', '!']
             f = open(file)
             for line in f:
                 for punct in symbols:
-                    line = line.replace(punct, "")
+                    line = line.replace(punct, " ")
+                line = line.replace("(", "( ")
+                line = line.replace(".", " ")
                 line_list = line.split()
                 for n in range(len(line_list)):
                     line_list
@@ -126,18 +146,24 @@ def derive_symbols():
                         if line_list[n-1] != "=" and not '[' in line_list[n-1]:
                             if not ']' in line_list[n-1]:
                                 already.append(line_list[n-1])
-                                printlist.append('[Python, ' + line_list[n-1] + ']')
-                                # print('[Python, ' + line_list[n-1] + ']')
+                                word = line_list[n-1].replace("(", "")
+                                printlist.append('[Python, ' + word + ']')
                     if line_list[n-1]=="def" and not line_list[n] in already:
                         if line_list[n] != "=" and not ']' in line_list[n]:
                             already.append(line_list[n])
-                            printlist.append('[Python, ' + line_list[n] + ']')
-                            # print('[Python, ' + line_list[n] + ']')
+                            word = line_list[n].replace("(", "") # screen parens 
+                            printlist.append('[Python, ' + word + ']')
                     if line_list[n] == "in" and not line_list[n-1] in already:
-                        if line_list[n-1] != "not":
+                        if line_list[n-1] != "not" and line_list[n-1] != "]":
                             if line_list[n] != "=" and not '[' in line_list[n-1]:
                                 already.append(line_list[n-1])
-                                printlist.append('[Python, ' + line_list[n-1] + ']')
+                                printlist.append('[Python, ' + line_list[n-1].replace("(", "") + ']')
+                    # for retrieving function calls 
+                    if line_list[n].endswith("(") and not line_list[n] in already:
+                        if not ']' in line_list[n] and line_list[n] != "(":
+                            already.append(line_list[n])
+                            word = line_list[n].replace("( ", "") 
+                            printlist.append('[Python, ' + line_list[n].replace("(", "") + ']')
     symbols_file = open('symbols.txt', 'w')
     for line in printlist:
         symbols_file.write(line + '\n')
@@ -148,8 +174,8 @@ def derive_symbols():
 
 def derive_HTML():
     html = open('csc344.html', '+w')
-    html.write("<html><body><center><br>")
-    html.write("<font size='7'>")
+    html.write("<html><body bgcolor='99d6e8'><center><br>")
+    html.write("<font size='6'>")
     html.write("<b>Assignments for CSC 344</b><br>")
     html.write("Michael Phillips<hr>") 
     file_type = ['.c', '.lsp', '.scala', '.pro', '.py']
@@ -205,7 +231,7 @@ def derive_email():
 
 def main():
     derive_symbols()     # generates the symbols.txt file 
-    derive_HTML()        # generates the HTML web page for assignments
+    derive_HTML()        # generates the HTML web page with assignments
     derive_zip()         # generates the assignments in a '.zip' file. 
     derive_email()       # sends the '.zip' file as an email 
 
